@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { ACTIONS_CORS_HEADERS, ActionGetResponse, ActionPostRequest } from '@solana/actions'
-import { Connection, PublicKey } from '@solana/web3.js'
+import { ACTIONS_CORS_HEADERS, ActionGetResponse, ActionPostRequest, ActionPostResponse, createPostResponse } from '@solana/actions'
+import { Connection, PublicKey, Transaction } from '@solana/web3.js'
 import { Program } from '@coral-xyz/anchor'
+import {Voting} from "../../../../anchor/target/types/voting"
+import IDL from "../../../../anchor/target/idl/voting.json"
+import { BN } from 'bn.js'
+
 export async function GET(req: NextRequest) {
   try {
     const actionMetaData: ActionGetResponse = {
@@ -13,12 +17,12 @@ export async function GET(req: NextRequest) {
         actions: [
           {
             type: 'message',
-            href: '/#',
+            href: '/api/action?candidate=Coffee',
             label: 'Vote for coffee',
           },
           {
             type: 'message',
-            href: '/#',
+            href: '/api/action?candidate=Chai',
             label: 'Vote for chai',
           },
         ],
@@ -38,14 +42,36 @@ export async function POST(req: NextRequest) {
       return NextResponse.json('Invalid candidate', { status: 400, headers: ACTIONS_CORS_HEADERS })
     }
     const connection = new Connection('', 'confirmed')
+    // settin up the IDL
     const program: Program<Voting> = new Program(IDL, { connection })
     const body: ActionPostRequest = await req.json()
+    // setting up the instruction
     const voter = new PublicKey(body.account)
     if (!voter) {
-      return NextResponse.json('Could not find account with this public key', {
-        status: 400,
-        headers: ACTIONS_CORS_HEADERS,
+     const instruction = await program.methods.vote(new BN(0)).accounts({
+        signer:voter,
+      }).instruction()
+      const recentBlockhash = await connection.getLatestBlockhash()
+      // after setting instruction, set up the transaction
+      const transaction = new Transaction({
+        feePayer:voter,
+        blockhash:recentBlockhash.blockhash,
+        lastValidBlockHeight:recentBlockhash.lastValidBlockHeight,
+      }).add(instruction)
+      // create post action handler
+      const action = await createPostResponse({
+        fields:{
+          transaction:transaction,
+          type:"transaction",
+        }
       })
+      return NextResponse.json(action)
     }
-  } catch (error) {}
+  } catch (error) {
+    return NextResponse.json('Could not find account with this public key', {
+      status: 400,
+      headers: ACTIONS_CORS_HEADERS,
+    })
+
+  }
 }
