@@ -8,7 +8,6 @@ skip-lint = false
 
 [programs.localnet]
 counter = "FqzkXZdwYjurnUKetJCAvaUw5WAqbwzU6gZEwydeEfqS"
-donate = "9v1mmvCjtnqsDHTcid8j35vu6qnxV7sSiaN7bTPZU1RM"
 
 [registry]
 url = "https://api.apr.dev"
@@ -19,4 +18,3 @@ wallet = "~/.config/solana/id.json"
 
 [scripts]
 test = "../node_modules/.bin/jest --preset ts-jest"
-test = "yarn run ts-mocha -p ./tsconfig.json -t 1000000 tests/**/*.ts"
