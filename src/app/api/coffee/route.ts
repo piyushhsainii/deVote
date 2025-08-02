@@ -13,6 +13,7 @@ function createCorsHeaders() {
     'Access-Control-Allow-Methods': ACTIONS_CORS_HEADERS_MIDDLEWARE.methods.join(', '),
     'Access-Control-Allow-Headers': ACTIONS_CORS_HEADERS_MIDDLEWARE.allowedHeaders.join(', '),
     'Access-Control-Expose-Headers': ACTIONS_CORS_HEADERS_MIDDLEWARE.exposedHeaders.join(', '),
+    'Content-Type': 'application/json',
     'X-Action-Version': '1',
     'X-Blockchain-Ids': 'solana',
   }
@@ -161,7 +162,7 @@ export async function PUT(req: NextRequest) {
 }
 
 export async function OPTIONS(req: NextRequest) {
-  return NextResponse.json(null, {
+  return new Response(null, {
     status: 200,
     headers: createCorsHeaders(),
   })
