@@ -44,7 +44,10 @@ export async function POST(req: NextRequest) {
     // setup the connection
     const url = new URL(req.url)
     const moneyAmount = url.searchParams.get('amount')
-    const connection = new Connection('', 'confirmed')
+    const connection = new Connection(
+      'https://solana-devnet.g.alchemy.com/v2/eifO49VRqgp-yYQHb1m5ULMSYoQyjT8u',
+      'confirmed',
+    )
     const program = new Program(IDL, { connection })
     const body = await req.json()
     // parse the signer
@@ -75,7 +78,7 @@ export async function POST(req: NextRequest) {
     if (moneyAmount) {
       return NextResponse.json('Invalid Request', { status: 400 })
     }
-    return NextResponse.json(transaction)
+    return NextResponse.json(transaction, { headers: ACTIONS_CORS_HEADERS })
   } catch (error) {
     return NextResponse.json(error)
   }
