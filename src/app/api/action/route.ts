@@ -1,9 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { ACTIONS_CORS_HEADERS, ActionGetResponse, ActionPostRequest, ActionPostResponse, createPostResponse } from '@solana/actions'
+import {
+  ACTIONS_CORS_HEADERS,
+  ActionGetResponse,
+  ActionPostRequest,
+  ActionPostResponse,
+  createPostResponse,
+} from '@solana/actions'
 import { Connection, PublicKey, Transaction } from '@solana/web3.js'
 import { Program } from '@coral-xyz/anchor'
-import {Voting} from "../../../../anchor/target/types/voting"
-import IDL from "../../../../anchor/target/idl/voting.json"
+import { Voting } from '../../../../anchor/target/types/voting'
+import IDL from '../../../../anchor/target/idl/voting.json'
 import { BN } from 'bn.js'
 
 export async function GET(req: NextRequest) {
@@ -48,30 +54,33 @@ export async function POST(req: NextRequest) {
     // setting up the instruction
     const voter = new PublicKey(body.account)
     if (!voter) {
-     const instruction = await program.methods.vote(new BN(0)).accounts({
-        signer:voter,
-      }).instruction()
-      const recentBlockhash = await connection.getLatestBlockhash()
-      // after setting instruction, set up the transaction
-      const transaction = new Transaction({
-        feePayer:voter,
-        blockhash:recentBlockhash.blockhash,
-        lastValidBlockHeight:recentBlockhash.lastValidBlockHeight,
-      }).add(instruction)
-      // create post action handler
-      const action = await createPostResponse({
-        fields:{
-          transaction:transaction,
-          type:"transaction",
-        }
-      })
-      return NextResponse.json(action)
+      return
     }
+    const instruction = await program.methods
+      .vote(new BN(0))
+      .accounts({
+        signer: voter,
+      })
+      .instruction()
+    const recentBlockhash = await connection.getLatestBlockhash()
+    // after setting instruction, set up the transaction
+    const transaction = new Transaction({
+      feePayer: voter,
+      blockhash: recentBlockhash.blockhash,
+      lastValidBlockHeight: recentBlockhash.lastValidBlockHeight,
+    }).add(instruction)
+    // create post action handler
+    const action = await createPostResponse({
+      fields: {
+        transaction: transaction,
+        type: 'transaction',
+      },
+    })
+    return NextResponse.json(action)
   } catch (error) {
     return NextResponse.json('Could not find account with this public key', {
       status: 400,
       headers: ACTIONS_CORS_HEADERS,
     })
-
   }
 }

@@ -1,0 +1,44 @@
+{
+  "address": "CjMRQEhgcMzjz184fcHex12TmsYL4c198cFPxumjW5o1",
+  "metadata": {
+    "name": "cofee",
+    "version": "0.1.0",
+    "spec": "0.1.0",
+    "description": "Created with Anchor"
+  },
+  "instructions": [
+    {
+      "name": "initialize",
+      "discriminator": [175, 175, 109, 31, 13, 152, 155, 237],
+      "accounts": [
+        {
+          "name": "signer",
+          "writable": true,
+          "signer": true
+        },
+        {
+          "name": "receiver",
+          "docs": ["we trust that the provided `receiver` PK is safe and known off-chain (from the caller)."],
+          "writable": true
+        },
+        {
+          "name": "system_program",
+          "address": "11111111111111111111111111111111"
+        }
+      ],
+      "args": [
+        {
+          "name": "amount",
+          "type": "u64"
+        }
+      ]
+    }
+  ],
+  "errors": [
+    {
+      "code": 6000,
+      "name": "LowBalance",
+      "msg": "Minimum amount should be more than 0!"
+    }
+  ]
+}

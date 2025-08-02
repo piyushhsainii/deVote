@@ -108,8 +108,8 @@ pub struct Candidate {
 }
 
 #[derive(Accounts)]
-#[instruction(poll_id:u64)]
-pub struct Vote<'info> {
+#[instruction(poll_id:u64)] 
+ pub struct Vote<'info> {
     #[account(mut)]
     pub signer:Signer<'info>,
     #[account(
