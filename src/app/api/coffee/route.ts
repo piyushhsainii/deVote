@@ -33,7 +33,9 @@ export async function GET(req: NextRequest) {
         ],
       },
     }
-    return NextResponse.json(actionData, { headers: ACTIONS_CORS_HEADERS })
+    return NextResponse.json(actionData, {
+      headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' },
+    })
   } catch (error) {
     return NextResponse.json(error)
   }
@@ -78,8 +80,21 @@ export async function POST(req: NextRequest) {
     if (moneyAmount) {
       return NextResponse.json('Invalid Request', { status: 400 })
     }
-    return NextResponse.json(transaction, { headers: ACTIONS_CORS_HEADERS })
+    return NextResponse.json(transaction, {
+      headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' },
+    })
   } catch (error) {
     return NextResponse.json(error)
   }
+}
+
+export async function OPTIONS() {
+  return new Response(null, {
+    status: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'Content-Type',
+    },
+  })
 }
