@@ -1,4 +1,4 @@
-import { ActionGetResponse, createPostResponse } from '@solana/actions'
+import { ActionGetResponse, ACTIONS_CORS_HEADERS, createPostResponse } from '@solana/actions'
 import { Connection, Transaction } from '@solana/web3.js'
 import { NextRequest, NextResponse } from 'next/server'
 import IDL from '../../../../anchor/target/idl/coffee.json'
@@ -63,7 +63,7 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json(actionData, {
-      headers: createCorsHeaders(),
+      headers: ACTIONS_CORS_HEADERS,
     })
   } catch (error) {
     console.error('GET Error:', error)
@@ -71,7 +71,7 @@ export async function GET(req: NextRequest) {
       { error: 'Internal Server Error' },
       {
         status: 500,
-        headers: createCorsHeaders(),
+        headers: ACTIONS_CORS_HEADERS,
       },
     )
   }
@@ -94,7 +94,7 @@ export async function POST(req: NextRequest) {
         { error: 'Invalid or missing amount parameter' },
         {
           status: 400,
-          headers: createCorsHeaders(),
+          headers: ACTIONS_CORS_HEADERS,
         },
       )
     }
@@ -116,7 +116,7 @@ export async function POST(req: NextRequest) {
         { error: 'Missing account in request body' },
         {
           status: 400,
-          headers: createCorsHeaders(),
+          headers: ACTIONS_CORS_HEADERS,
         },
       )
     }
@@ -151,7 +151,7 @@ export async function POST(req: NextRequest) {
     console.log('Transaction created successfully')
 
     return NextResponse.json(transaction, {
-      headers: createCorsHeaders(),
+      headers: ACTIONS_CORS_HEADERS,
     })
   } catch (error) {
     console.error('POST Error:', error)
@@ -159,7 +159,7 @@ export async function POST(req: NextRequest) {
       { error: 'Internal Server Error', details: error },
       {
         status: 500,
-        headers: createCorsHeaders(),
+        headers: ACTIONS_CORS_HEADERS,
       },
     )
   }
@@ -169,6 +169,6 @@ export async function OPTIONS(req: NextRequest) {
   console.log('OPTIONS request received')
   return new Response(null, {
     status: 200,
-    headers: createCorsHeaders(),
+    headers: ACTIONS_CORS_HEADERS,
   })
 }
