@@ -16,17 +16,17 @@ export async function GET(req: NextRequest) {
       links: {
         actions: [
           {
-            href: req.url + '/api/coffee?amount=20',
+            href: req.url + '?amount=20',
             label: '20$',
             type: 'transaction',
           },
           {
-            href: req.url + '/api/coffee?amount=50',
+            href: req.url + '?amount=50',
             label: '50$',
             type: 'transaction',
           },
           {
-            href: req.url + '/api/coffee?amount=100',
+            href: req.url + '?amount=100',
             label: '100$',
             type: 'transaction',
           },
