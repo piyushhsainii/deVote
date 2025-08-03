@@ -17,8 +17,19 @@ export const GET = async () => {
   }
 
   return Response.json(payload, {
-    headers: ACTIONS_CORS_HEADERS,
+    headers: {
+      ...ACTIONS_CORS_HEADERS,
+      'X-Action-Version': '1',
+      'X-Blockchain-Ids': 'solana',
+    },
   })
 }
 
-export const OPTIONS = async () => Response.json(null, { headers: ACTIONS_CORS_HEADERS })
+export const OPTIONS = async () =>
+  Response.json(null, {
+    headers: {
+      ...ACTIONS_CORS_HEADERS,
+      'X-Action-Version': '1',
+      'X-Blockchain-Ids': 'solana',
+    },
+  })
