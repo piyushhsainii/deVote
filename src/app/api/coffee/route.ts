@@ -58,7 +58,12 @@ export async function POST(req: NextRequest) {
     const moneyAmount = url.searchParams.get('amount')
 
     console.log('Amount parameter:', moneyAmount)
-
+    if (req.headers.get('user-agent')?.includes('dialect')) {
+      return NextResponse.json(
+        { status: 'ok', message: 'Health check' },
+        { headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' } },
+      )
+    }
     // Validate amount parameter
     if (!moneyAmount || isNaN(Number(moneyAmount))) {
       console.log('Invalid amount parameter')
