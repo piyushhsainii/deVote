@@ -6,7 +6,7 @@
     },
     {
       "pathPattern": "/api/coffee/*",
-      "apiPath": "/api/coffee"
+      "apiPath": "/api/coffee/*"
     }
   ]
 }
