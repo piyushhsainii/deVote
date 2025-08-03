@@ -23,12 +23,12 @@ export async function GET(req: NextRequest) {
           {
             href: req.url + '?amount=50',
             label: '50$',
-            type: 'post',
+            type: 'message',
           },
           {
             href: req.url + '?amount=100',
             label: '100$',
-            type: 'post',
+            type: 'external-link',
           },
         ],
       },
