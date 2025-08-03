@@ -1,4 +1,10 @@
-import { ActionGetResponse, ActionPostRequest, ACTIONS_CORS_HEADERS, createPostResponse } from '@solana/actions'
+import {
+  ActionGetResponse,
+  ActionPostRequest,
+  ActionPostResponse,
+  ACTIONS_CORS_HEADERS,
+  createPostResponse,
+} from '@solana/actions'
 import { Connection, PublicKey, Transaction } from '@solana/web3.js'
 import { NextRequest, NextResponse } from 'next/server'
 import IDL from '../../../../anchor/target/idl/coffee.json'
@@ -29,6 +35,11 @@ export async function GET(req: NextRequest) {
             href: req.url + '?amount=100',
             label: '100$',
             type: 'external-link',
+          },
+          {
+            href: req.url + '?amount=30',
+            label: '100$',
+            type: 'transaction',
           },
         ],
       },
