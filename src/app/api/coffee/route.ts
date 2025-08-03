@@ -57,23 +57,16 @@ export async function POST(req: NextRequest) {
     const url = new URL(req.url)
     const moneyAmount = url.searchParams.get('amount')
 
-    console.log('Amount parameter:', moneyAmount)
-    if (req.headers.get('user-agent')?.includes('dialect')) {
-      return NextResponse.json(
-        { status: 'ok', message: 'Health check' },
-        { headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' } },
-      )
-    }
     // Validate amount parameter
     if (!moneyAmount || isNaN(Number(moneyAmount))) {
       console.log('Invalid amount parameter')
-      return NextResponse.json(
-        { error: 'Invalid or missing amount parameter' },
-        {
-          status: 400,
-          headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' },
-        },
-      )
+      // return NextResponse.json(
+      //   { error: 'Invalid or missing amount parameter' },
+      //   {
+      //     status: 400,
+      //     headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' },
+      //   },
+      // )
     }
 
     const connection = new Connection(
@@ -88,14 +81,14 @@ export async function POST(req: NextRequest) {
     // Parse the signer
     const donater = body.account
     if (!donater) {
-      console.log('Missing account in request body')
-      return NextResponse.json(
-        { error: 'Missing account in request body' },
-        {
-          status: 400,
-          headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' },
-        },
-      )
+      // console.log('Missing account in request body')
+      // return NextResponse.json(
+      //   { error: 'Missing account in request body' },
+      //   {
+      //     status: 400,
+      //     headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' },
+      //   },
+      // )
     }
 
     // Create the instruction
