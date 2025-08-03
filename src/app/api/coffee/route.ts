@@ -6,34 +6,6 @@ import { Program } from '@coral-xyz/anchor'
 import { BN } from 'bn.js'
 import { convertMoneyInSol } from '@/lib/helper'
 
-// Define your custom CORS middleware directly here or import from your own file
-const ACTIONS_CORS_HEADERS_MIDDLEWARE = {
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'OPTIONS'],
-  allowedHeaders: [
-    'Content-Type',
-    'Authorization',
-    'Content-Encoding',
-    'Accept-Encoding',
-    'X-Accept-Action-Version',
-    'X-Accept-Blockchain-Ids',
-  ],
-  exposedHeaders: ['X-Action-Version', 'X-Blockchain-Ids'],
-}
-
-// Helper function to create CORS headers from your middleware
-function createCorsHeaders() {
-  return {
-    'Access-Control-Allow-Origin': ACTIONS_CORS_HEADERS_MIDDLEWARE.origin,
-    'Access-Control-Allow-Methods': ACTIONS_CORS_HEADERS_MIDDLEWARE.methods.join(', '),
-    'Access-Control-Allow-Headers': ACTIONS_CORS_HEADERS_MIDDLEWARE.allowedHeaders.join(', '),
-    'Access-Control-Expose-Headers': ACTIONS_CORS_HEADERS_MIDDLEWARE.exposedHeaders.join(', '),
-    'Content-Type': 'application/json',
-    'X-Action-Version': '1',
-    'X-Blockchain-Ids': 'solana',
-  }
-}
-
 export async function GET(req: NextRequest) {
   try {
     const actionData: ActionGetResponse = {

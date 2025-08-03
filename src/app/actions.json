@@ -1,0 +1,12 @@
+{
+  "rules": [
+    {
+      "pathPattern": "/api/coffee",
+      "apiPath": "/api/coffee"
+    },
+    {
+      "pathPattern": "/api/coffee/*",
+      "apiPath": "/api/coffee"
+    }
+  ]
+}
