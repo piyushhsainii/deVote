@@ -35,7 +35,7 @@ export async function GET(req: NextRequest) {
     }
 
     return NextResponse.json(actionData, {
-      headers: ACTIONS_CORS_HEADERS,
+      headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' },
     })
   } catch (error) {
     console.error('GET Error:', error)
@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
         { error: 'Invalid or missing amount parameter' },
         {
           status: 400,
-          headers: ACTIONS_CORS_HEADERS,
+          headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' },
         },
       )
     }
@@ -88,7 +88,7 @@ export async function POST(req: NextRequest) {
         { error: 'Missing account in request body' },
         {
           status: 400,
-          headers: ACTIONS_CORS_HEADERS,
+          headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' },
         },
       )
     }
@@ -123,7 +123,7 @@ export async function POST(req: NextRequest) {
     console.log('Transaction created successfully')
 
     return NextResponse.json(transaction, {
-      headers: ACTIONS_CORS_HEADERS,
+      headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' },
     })
   } catch (error) {
     console.error('POST Error:', error)
@@ -131,7 +131,7 @@ export async function POST(req: NextRequest) {
       { error: 'Internal Server Error', details: error },
       {
         status: 500,
-        headers: ACTIONS_CORS_HEADERS,
+        headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' },
       },
     )
   }
