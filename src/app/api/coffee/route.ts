@@ -1,5 +1,5 @@
-import { ActionGetResponse, ACTIONS_CORS_HEADERS, createPostResponse } from '@solana/actions'
-import { Connection, Transaction } from '@solana/web3.js'
+import { ActionGetResponse, ActionPostRequest, ACTIONS_CORS_HEADERS, createPostResponse } from '@solana/actions'
+import { Connection, PublicKey, Transaction } from '@solana/web3.js'
 import { NextRequest, NextResponse } from 'next/server'
 import IDL from '../../../../anchor/target/idl/coffee.json'
 import { Program } from '@coral-xyz/anchor'
@@ -18,17 +18,17 @@ export async function GET(req: NextRequest) {
           {
             href: req.url + '?amount=20',
             label: '20$',
-            type: 'transaction',
+            type: 'post',
           },
           {
             href: req.url + '?amount=50',
             label: '50$',
-            type: 'transaction',
+            type: 'post',
           },
           {
             href: req.url + '?amount=100',
             label: '100$',
-            type: 'transaction',
+            type: 'post',
           },
         ],
       },
@@ -74,12 +74,13 @@ export async function POST(req: NextRequest) {
       'confirmed',
     )
     const program = new Program(IDL, { connection })
-    const body = await req.json()
+    const body: ActionPostRequest = await req.json()
 
     console.log('Request body:', body)
 
     // Parse the signer
     const donater = body.account
+    const user = new PublicKey(donater)
     if (!donater) {
       // console.log('Missing account in request body')
       // return NextResponse.json(
@@ -105,7 +106,7 @@ export async function POST(req: NextRequest) {
     // Get latest block hash
     const blockHash = await connection.getLatestBlockhash()
     const tx = new Transaction({
-      feePayer: donater,
+      feePayer: user,
       blockhash: blockHash.blockhash,
       lastValidBlockHeight: blockHash.lastValidBlockHeight,
     }).add(instruction)
