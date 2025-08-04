@@ -1,18 +1,8 @@
 import { ACTIONS_CORS_HEADERS, ActionsJson } from '@solana/actions'
 import { NextResponse } from 'next/server'
-
+import actions from '../public/actions.json'
 export const GET = async () => {
-  const payload: ActionsJson = {
-    rules: [
-      // Map all root level routes to an action
-      {
-        pathPattern: '/donate',
-        apiPath: '/api/coffee',
-      },
-    ],
-  }
-
-  return NextResponse.json(payload, {
+  return NextResponse.json(actions, {
     headers: ACTIONS_CORS_HEADERS,
   })
 }
