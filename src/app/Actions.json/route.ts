@@ -1,7 +1,21 @@
 import { ACTIONS_CORS_HEADERS, ActionsJson } from '@solana/actions'
 import { NextResponse } from 'next/server'
-import actions from '../public/actions.json'
+
 export const GET = async () => {
+  const actions: ActionsJson = {
+    rules: [
+      {
+        pathPattern: '/*',
+        apiPath: '/api/actions/*',
+      },
+      // fallback
+      {
+        pathPattern: '/api/actions/**',
+        apiPath: '/api/actions/**',
+      },
+    ],
+  }
+
   return NextResponse.json(actions, {
     headers: ACTIONS_CORS_HEADERS,
   })
