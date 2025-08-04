@@ -5,7 +5,7 @@ import {
   ACTIONS_CORS_HEADERS,
   createPostResponse,
 } from '@solana/actions'
-import { Connection, PublicKey, Transaction } from '@solana/web3.js'
+import { clusterApiUrl, Connection, PublicKey, Transaction } from '@solana/web3.js'
 import { NextRequest, NextResponse } from 'next/server'
 import IDL from '../../../../anchor/target/idl/coffee.json'
 import { Program } from '@coral-xyz/anchor'
@@ -24,20 +24,15 @@ export async function GET(req: NextRequest) {
           {
             href: req.url + '?amount=20',
             label: '20$',
-            type: 'post',
+            type: 'transaction',
           },
           {
             href: req.url + '?amount=50',
             label: '50$',
-            type: 'message',
+            type: 'transaction',
           },
           {
             href: req.url + '?amount=100',
-            label: '100$',
-            type: 'external-link',
-          },
-          {
-            href: req.url + '?amount=30',
             label: '100$',
             type: 'transaction',
           },
@@ -71,19 +66,16 @@ export async function POST(req: NextRequest) {
     // Validate amount parameter
     if (!moneyAmount || isNaN(Number(moneyAmount))) {
       console.log('Invalid amount parameter')
-      // return NextResponse.json(
-      //   { error: 'Invalid or missing amount parameter' },
-      //   {
-      //     status: 400,
-      //     headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' },
-      //   },
-      // )
+      return NextResponse.json(
+        { error: 'Invalid or missing amount parameter' },
+        {
+          status: 400,
+          headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' },
+        },
+      )
     }
 
-    const connection = new Connection(
-      'https://solana-devnet.g.alchemy.com/v2/eifO49VRqgp-yYQHb1m5ULMSYoQyjT8u',
-      'confirmed',
-    )
+    const connection = new Connection(clusterApiUrl('devnet'), 'confirmed')
     const program = new Program(IDL, { connection })
     const body: ActionPostRequest = await req.json()
 
@@ -93,14 +85,14 @@ export async function POST(req: NextRequest) {
     const donater = body.account
     const user = new PublicKey(donater)
     if (!donater) {
-      // console.log('Missing account in request body')
-      // return NextResponse.json(
-      //   { error: 'Missing account in request body' },
-      //   {
-      //     status: 400,
-      //     headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' },
-      //   },
-      // )
+      console.log('Missing account in request body')
+      return NextResponse.json(
+        { error: 'Missing account in request body' },
+        {
+          status: 400,
+          headers: { ...ACTIONS_CORS_HEADERS, 'X-Action-Version': '1', 'X-Blockchain-Ids': 'solana' },
+        },
+      )
     }
 
     // Create the instruction
@@ -122,11 +114,11 @@ export async function POST(req: NextRequest) {
       lastValidBlockHeight: blockHash.lastValidBlockHeight,
     }).add(instruction)
 
-    const transaction = await createPostResponse({
+    const transaction: ActionPostResponse = await createPostResponse({
       fields: {
         transaction: tx,
         type: 'transaction',
-        message: `Buy me a Coffee - $${moneyAmount}`,
+        message: `Thanks for the coffee fren :)`,
       },
     })
 
