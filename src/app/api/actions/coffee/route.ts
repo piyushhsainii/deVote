@@ -7,7 +7,7 @@ import {
 } from '@solana/actions'
 import { clusterApiUrl, Connection, PublicKey, Transaction } from '@solana/web3.js'
 import { NextRequest, NextResponse } from 'next/server'
-import IDL from '../../../../anchor/target/idl/coffee.json'
+import IDL from '../../../../../anchor/target/idl/coffee.json'
 import { Program } from '@coral-xyz/anchor'
 import { BN } from 'bn.js'
 import { convertMoneyInSol } from '@/lib/helper'
